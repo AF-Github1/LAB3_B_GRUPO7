@@ -19,3 +19,15 @@ class Dados:
                 self.operacoes[oper] = [] 
             self.operacoes[oper].append(registo)
             print(self.operacoes)
+
+    def get_operacoes(self, oper=None):
+        """
+        Executa a cópia do dicionário de forma a ser seguro.
+        :param oper:
+        :return:
+        """
+        with self.lock:
+            if oper:
+                return self.operacoes.get(oper, [])[:]  # Cópia da lista!
+        return {k: v[:] for k, v in self.operacoes.items()}  # Listas copiadas
+

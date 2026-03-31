@@ -3,7 +3,8 @@ import servidor
 import socket
 from dados.dados import Dados
 from servidor.operacoes.somar import Somar
-
+from servidor.maquina import broadcast_emissor
+from servidor.maquina.lista_clientes import ListaClientes
 class Maquina:
 	def __init__(self):
 		self.s = socket.socket()
@@ -11,8 +12,15 @@ class Maquina:
 		self.s.listen(35000)
 		self.sum = Somar()
 		self.dados = Dados()
+		
+		# Novo: cria a thread de broadcast
+		self.clientes = ListaClientes()
+		self.broadcast = broadcast_emissor.ThreadBroadcast(self.clientes, self.dados, intervalo=10)
+
+
 
 	def execute(self):
+		self.broadcast.start()
 		print("Waiting for clients on port " + str(servidor.PORT))
 		while True: # Loop infinito para múltiplos clients
 			print("On accept...")

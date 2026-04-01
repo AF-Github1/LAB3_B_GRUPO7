@@ -15,7 +15,7 @@ class Maquina:
 		
 		# Novo: cria a thread de broadcast
 		self.clientes = ListaClientes()
-		self.broadcast = broadcast_emissor.ThreadBroadcast(self.clientes, self.dados, intervalo=10)
+		self.broadcast = broadcast_emissor.ThreadBroadcast(self.clientes, self.dados, intervalo=5)
 
 
 
@@ -26,6 +26,7 @@ class Maquina:
 			print("On accept...")
 			connection, address = self.s.accept()
 			print("Client", address, " connected")
+			self.clientes.adicionar(address, connection) # Adicionado para realizar incremento de clientes
 			processo_cliente = ProcessaCliente(connection, address, self.dados)
 			processo_cliente.start()
 

@@ -1,6 +1,7 @@
 import socket
 import json
 import cliente
+from cliente.interface.broadcast_receiver import BroadcastReceiver
 # PORT e SERVER ADDRESS
 
 class Interface:
@@ -52,29 +53,30 @@ class Interface:
 	###
 
 
-	def execute(self):
-
-
-		stop_input = "y"
-		#x:float = float(input("x="))
-		#y:float = float(input("y="))
-		while True:
-			print("Qual é o cálculo que quer efetuar? x + - / ? Escreva stop para sair")
-			res: str = input()
-			if res == "stop":
-				self.send_str(self.connection, cliente.END_OP)
-				self.connection.close()
-				break
-			print("Preciso que introduza dois valores:")
-			x: int = int(input("x="))
-			y: int = int(input("y="))
-
-			if res =="+":
+	def execute(self): 
+		receiver = BroadcastReceiver(self.connection) # Passa só connection
+		receiver.start() 
+		print("Preciso que introduza dois valores:")
+		x:int = int(input("x="))
+		y:int = int(input("y="))
+		res =""
+		while res!=".":
+			print("Qual é o cálculo que quer efetuar? x + - / ('.' para fim)")
+			res:str = input()
+			if res =="+": 
 				self.send_str(self.connection,cliente.ADD_OP)
 				self.send_int(self.connection,x, cliente.INT_SIZE)
 				self.send_int(self.connection,y, cliente.INT_SIZE)
-				res = self.receive_int(self.connection,cliente.INT_SIZE)
-				print("O resultado da soma é:",res)
+				#res = self.receive_int(self.connection,cliente.INT_SIZE)
+				#print("O resultado da soma é:",res)
+			if res =="-":
+				self.send_str(self.connection,cliente.SUB_OP)
+				self.send_int(self.connection,x, cliente.INT_SIZE)
+				self.send_int(self.connection,y, cliente.INT_SIZE)
+				#res = self.receive_int(self.connection,cliente.INT_SIZE
+				#print("O resultado da subtração é:",res)
+		self.send_str(self.connection, cliente.END_OP)
+
 
 #res = self.m.execute("+"+" "+str(x)+" "+str(y))
 			#print("O valor da operação somar é:", res)

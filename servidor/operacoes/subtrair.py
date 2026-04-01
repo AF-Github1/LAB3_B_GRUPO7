@@ -1,10 +1,13 @@
 class Subtrair:
     def __init__(self):
-        self.x = 0
-        self.y = 0
-        self.res = 0
+        pass
 
 
-    def execute(self,x:float, y:float)->float:
-        self.res = self.x - self.y
-        return self.res
+    def execute(self, x: float, y: float)->float:
+        """
+        Soma 2 números
+        :param x: valor a que se subtrai
+        :param y: valor a subtrair
+        :return: devolve o resultado da subtração
+        """
+        return x - y

@@ -1,6 +1,6 @@
 import servidor
 import threading
-from servidor.operacoes import somar
+from servidor.operacoes import somar, subtrair
 import json
 
 class ProcessaCliente(threading.Thread):
@@ -9,6 +9,7 @@ class ProcessaCliente(threading.Thread):
         self.connection = connection
         self.address = address
         self.sum = somar.Somar()
+        self.sub = subtrair.Subtrair()
         self.dados = dados
         
 
@@ -66,12 +67,19 @@ class ProcessaCliente(threading.Thread):
                 y = self.receive_int(servidor.INT_SIZE)
                 print(self.address,":somar ",x," + ", y)
                 result = self.sum.execute(x, y)
-                self.send_int(result, servidor.INT_SIZE)
+                #self.send_int(result, servidor.INT_SIZE)
                 self.dados.registar_oper('soma', x, y, result, self.address)
                 print(self.address,": registada uma soma com os operandos ",x," e ",y,
                       "com o resultado ",result, "para o cliente", self.address)
             elif request_type == servidor.SUB_OP:
-                pass
+                x = self.receive_int(servidor.INT_SIZE)
+                y = self.receive_int(servidor.INT_SIZE)
+                print(self.address, ":subtrair ", x, " - ", y)
+                result = self.sub.execute(x, y)
+                #self.send_int(result, servidor.INT_SIZE)
+                self.dados.registar_oper('subtracao', x, y, result, self.address)
+                print(self.address, ": registada uma subtracao com os operandos ", x, " e ", y,
+                      "com o resultado ", result, "para o cliente", self.address)
             elif request_type == servidor.END_OP:
                 last_request = True
                 print(self.address,"Thread terminada")

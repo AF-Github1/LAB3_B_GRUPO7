@@ -5,10 +5,10 @@ import time
 import json
 from typing import Dict
 from servidor.maquina.lista_clientes import ListaClientes
-from servidor.dados.dados import Dados
+from dados.dados import Dados
 
 class ThreadBroadcast(threading.Thread):
-    def __init__(self, lista_clientes: ListaClientes, dados: Dados, intervalo: int = 10):
+    def __init__(self, lista_clientes: ListaClientes, dados: Dados, intervalo: int = 5):
         super().__init__(daemon=True)
         self.lista_clientes = lista_clientes
         self.dados = dados
